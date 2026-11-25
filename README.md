@@ -4,6 +4,10 @@ JVM 运行期热更新工具：不重启应用即可替换 **MyBatis SQL** 与 *
 
 适用于无法随时重启的线上系统：改一条慢 SQL、修一个方法体逻辑，不必走完整发版流程。
 
+> **当前分支 `jdk17-plus`**：示例工程运行在 **Spring Boot 3.3 + JDK 17**，并已实测 Boot 3 运行期装配与集群同步。
+> SDK 三模块（`agent` / `core` / `starter`）仍产出 **JDK 8 字节码**，兼容面与 `main` 分支一致。
+> 需要 JDK 8 + Boot 2.7 的示例请切回 [`main`](../../tree/main)。
+
 ---
 
 ## 1. 模块说明
@@ -13,9 +17,9 @@ JVM 运行期热更新工具：不重启应用即可替换 **MyBatis SQL** 与 *
 | `dynamics-agent` | attach 到目标 JVM 后执行 `retransformClasses` 的 agent，**零第三方依赖** | JDK 8 |
 | `dynamics-core` | 类热替换（attach 自身 JVM）与 MyBatis `MappedStatement` 的 SQL 替换，**不依赖 Spring** | JDK 8 |
 | `dynamics-spring-boot-starter` | 自动装配 Redis 集群同步、热更新 REST 接口、可插拔权限校验 | JDK 8 |
-| `dynamics-example` | Spring Boot 2.7 + H2 集成示例，演示两类替换的完整调用 | JDK 8 |
+| `dynamics-example` | Spring Boot 3.3 + H2 集成示例，演示两类替换的完整调用 | JDK 17 |
 
-**全模块产出 JDK 8 字节码**，可直接用于 JDK 8 及以上的目标进程。`starter` 的 Spring 相关依赖全部 `provided`，并同时提供 Boot 2.x（`spring.factories`）与 Boot 3.x（`AutoConfiguration.imports`）两个自动装配入口，因此 Boot 3 应用也能引入；面向 JDK 17+ / Boot 3 的示例与验证将在独立分支提供。
+**SDK 三模块产出 JDK 8 字节码**，可直接用于 JDK 8 及以上的目标进程；本分支的 `example` 用 JDK 17。`starter` 的 Spring 相关依赖全部 `provided`，并同时提供 Boot 2.x（`spring.factories`）与 Boot 3.x（`AutoConfiguration.imports`）两个自动装配入口，两条路线均已实测（见 [docs/smoke-test.md](docs/smoke-test.md)）。
 
 只做类热替换、不用 Spring 的场景，直接依赖 `dynamics-core` 即可。
 
@@ -233,7 +237,7 @@ curl -X POST http://127.0.0.1:7071/api/dynamics/class/update-by-upload \
 
 ## 6. 构建
 
-用 **JDK 8** 构建全部模块：
+本分支用 **JDK 17** 构建：
 
 ```bash
 mvn install -DskipTests
@@ -245,7 +249,7 @@ mvn install -DskipTests
 mvn -pl dynamics-agent,dynamics-core,dynamics-spring-boot-starter -am install
 ```
 
-四个模块的 `source/target` 均为 `8`，产物字节码 major version 52。
+`agent` / `core` / `starter` 的 `source/target` 为 `8`（产物 major version 52），`example` 为 `17`（major version 61）。用 JDK 17 构建时前三者仍产出 JDK 8 字节码。
 
 实测记录与复现步骤见 [docs/smoke-test.md](docs/smoke-test.md)，示例工程的逐步操作见 [dynamics-example/README.md](dynamics-example/README.md)。
 

@@ -1,6 +1,6 @@
 # dynamics-example
 
-Spring Boot 2.7 + H2 的集成示例，演示 SQL 动态替换与类热替换的完整调用与效果观察。
+Spring Boot 3.3 + H2 的集成示例，演示 SQL 动态替换与类热替换的完整调用与效果观察（`jdk17-plus` 分支）。
 
 - 端口 **7071**
 - 数据库用 H2 内存库，启动即建表灌数据，无需外部 MySQL
@@ -10,7 +10,7 @@ Spring Boot 2.7 + H2 的集成示例，演示 SQL 动态替换与类热替换的
 
 ## 1. 启动
 
-需要 JDK 8。
+需要 JDK 17。
 
 ```bash
 # 在仓库根目录先安装 agent / core / starter
@@ -20,10 +20,10 @@ mvn -pl dynamics-agent,dynamics-core,dynamics-spring-boot-starter -am install -D
 mvn -pl dynamics-example spring-boot:run
 ```
 
-Redis 有密码或不在默认地址时改 `src/main/resources/application.yml` 的 `spring.redis`，或用启动参数覆盖，避免把凭据写进仓库：
+Redis 有密码或不在默认地址时改 `src/main/resources/application.yml` 的 `spring.data.redis`，或用启动参数覆盖，避免把凭据写进仓库：
 
 ```bash
-java -jar target/dynamics-example-1.0.0-SNAPSHOT.jar --spring.redis.password=你的密码
+java -jar target/dynamics-example-1.0.0-SNAPSHOT.jar --spring.data.redis.password=你的密码
 ```
 
 启动日志中应出现：

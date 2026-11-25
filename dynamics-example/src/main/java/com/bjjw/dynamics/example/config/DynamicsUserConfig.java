@@ -1,7 +1,7 @@
 package com.bjjw.dynamics.example.config;
 
 import com.bjjw.dynamics.starter.DynamicsUserProvider;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

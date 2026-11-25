@@ -10,12 +10,13 @@
     </parent>
 
     <artifactId>dynamics-example</artifactId>
-    <description>Spring Boot 2.7 + H2 集成示例，演示 SQL 动态替换与类热替换</description>
+    <description>Spring Boot 3 + H2 集成示例，演示 SQL 动态替换与类热替换（JDK 17+ 分支）</description>
 
     <properties>
-        <mybatis-starter.version>2.3.2</mybatis-starter.version>
-        <!-- H2 2.x 要求 JDK 11，示例保持 JDK 8 故锁 1.4.200 -->
-        <h2.version>1.4.200</h2.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <spring-boot3.version>3.3.5</spring-boot3.version>
+        <mybatis-starter.version>3.0.3</mybatis-starter.version>
     </properties>
 
     <dependencyManagement>
@@ -23,7 +24,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot2.version}</version>
+                <version>${spring-boot3.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -32,6 +33,13 @@
                 <groupId>org.mybatis</groupId>
                 <artifactId>mybatis</artifactId>
                 <version>3.5.13</version>
+            </dependency>
+            <!-- parent 为 JDK8 主线锁了 slf4j 1.7.36；Boot 3 的 logback 1.5 只认 slf4j 2.x 的
+                 ServiceLoader 绑定，沿用 1.7 会退化成 NOPLoggerFactory 并导致启动失败 -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>2.0.16</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -58,7 +66,6 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>${h2.version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -72,7 +79,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-boot2.version}</version>
+                <version>${spring-boot3.version}</version>
                 <executions>
                     <execution>
                         <goals>

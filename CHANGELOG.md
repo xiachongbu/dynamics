@@ -31,9 +31,9 @@
 
 ### 兼容性
 
-- **全部四个模块产出 JDK 8 字节码**（major version 52），目标进程 JDK 8 及以上可用。
+- SDK 三模块（`agent` / `core` / `starter`）产出 **JDK 8 字节码**（major version 52），目标进程 JDK 8 及以上可用。
 - attach 走 JNA 直连通道，**无需** `-Djdk.attach.allowAttachSelf=true`（JDK 8 / 17 实测）。
-- `example` 运行于 Spring Boot 2.7 + H2 1.4.200（H2 2.x 要求 JDK 11，故锁 1.4.x）。
-- `starter` 的 Spring 依赖为 `provided`，并提供 Boot 2.x / 3.x 双装配入口；面向 JDK 17+ 与 Boot 3 的示例与运行期验证将在独立分支提供。
+- `starter` 的 Spring 依赖为 `provided`，提供 Boot 2.x / 3.x 双装配入口，两条路线均已实测运行期装配与集群同步。
+- **分支差异**：`main` 的 example 为 Boot 2.7 + JDK 8 + H2 1.4.200；本分支 `jdk17-plus` 为 Boot 3.3.5 + JDK 17 + H2 2.2.224，并需覆盖 parent 锁定的 slf4j 1.7（原因见 [docs/smoke-test.md](docs/smoke-test.md) §4.2）。SDK 与 parent 在两个分支上完全一致。
 
 实测记录见 [docs/smoke-test.md](docs/smoke-test.md)。
