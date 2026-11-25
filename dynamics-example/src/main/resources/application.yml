@@ -1,0 +1,31 @@
+server:
+  port: 7071
+
+spring:
+  application:
+    name: dynamics-example
+  datasource:
+    url: jdbc:h2:mem:dynamics_demo;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+  redis:
+    host: 127.0.0.1
+    port: 6379
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+
+dynamics:
+  enabled: true
+  # 留空会按应用名首段推导成 dynamics:dynamics:update:topic，这里显式指定
+  topic: dynamics-example:dynamics:update:topic
+  authorized-users-key: dynamics:authorized:users
+
+logging:
+  level:
+    com.bjjw.dynamics: debug
